@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KisanSaathi - Smart Farm Dashboard</title>
+<link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <span class="logo-icon">🌾</span>
+    <span class="logo-text">Kisan<span>Saathi</span></span>
+  </div>
+  <nav>
+    <button class="active" onclick="showPage('dashboard')">Dashboard</button>
+    <button onclick="showPage('add-farm')">Add Farm</button>
+    <button onclick="showPage('chat')">AI Advisor</button>
+  </nav>
+</header>
+
+<div class="container">
+
+  <div class="page active" id="dashboard-page">
+    <div class="hero">
+      <h1>Smart Farm<br>Management</h1>
+      <p>Track your fields, monitor crops, and get AI-powered advice all in one place.</p>
+    </div>
+
+    <div class="weather-card" id="weather-card">
+      <div>
+        <div class="weather-location" id="weather-location">Detecting location...</div>
+        <div id="weather-main"><div class="weather-loading">Loading weather...</div></div>
+        <div class="weather-search">
+          <input type="text" id="weather-city-input" placeholder="Search city, e.g. Ludhiana" onkeydown="if(event.key==='Enter') searchWeatherCity()">
+          <button onclick="searchWeatherCity()">Search</button>
+        </div>
+      </div>
+      <div id="weather-icon-big" class="weather-icon-big"></div>
+    </div>
+
+    <div class="stats-strip" id="stats-strip">
+      <div class="stat-card"><div class="stat-label">Total Farms</div><div class="stat-value" id="stat-farms">-</div><div class="stat-unit">registered fields</div></div>
+      <div class="stat-card"><div class="stat-label">Total Area</div><div class="stat-value" id="stat-area">-</div><div class="stat-unit">acres</div></div>
+      <div class="stat-card"><div class="stat-label">Active Crops</div><div class="stat-value" id="stat-crops">-</div><div class="stat-unit">varieties</div></div>
+      <div class="stat-card"><div class="stat-label">States Covered</div><div class="stat-value" id="stat-states">-</div><div class="stat-unit">locations</div></div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">My Farms</div>
+          <button class="btn btn-primary btn-sm" onclick="showPage('add-farm')">+ Add Farm</button>
+        </div>
+        <div class="card-body" id="farms-list">
+          <div class="empty-state"><div>🌾</div>Loading farms...</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Quick Tips</div></div>
+        <div class="card-body">
+          <div class="tip-item" style="border-left-color:var(--leaf)">Check soil moisture before irrigation to save water and improve yield.</div>
+          <div class="tip-item" style="border-left-color:var(--wheat)">Monitor temperature changes because frost can damage standing crops.</div>
+          <div class="tip-item" style="border-left-color:var(--clay)">Use the AI advisor after saving farm data to get crop-specific guidance.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="add-farm-page">
+    <div class="page-heading">
+      <div class="page-title">Add New Farm</div>
+      <div class="page-sub">Fill in your farm details for AI-powered advice</div>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-header"><div class="card-title">Location and Area</div></div>
+        <div class="card-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Farm Name *</label>
+              <input type="text" id="farm-name" placeholder="e.g. North Field">
+            </div>
+            <div class="form-group">
+              <label>Village / Town *</label>
+              <input type="text" id="farm-village" placeholder="e.g. Ludhiana">
+            </div>
+            <div class="form-group">
+              <label>District</label>
+              <input type="text" id="farm-district" placeholder="e.g. Ludhiana">
+            </div>
+            <div class="form-group">
+              <label>State *</label>
+              <select id="farm-state">
+                <option value="">Select State</option>
+                <option>Punjab</option><option>Haryana</option><option>Uttar Pradesh</option>
+                <option>Rajasthan</option><option>Maharashtra</option><option>Madhya Pradesh</option>
+                <option>Gujarat</option><option>Bihar</option><option>West Bengal</option>
+                <option>Karnataka</option><option>Andhra Pradesh</option><option>Tamil Nadu</option>
+                <option>Telangana</option><option>Odisha</option><option>Assam</option><option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Total Area (Acres) *</label>
+              <input type="number" id="farm-area" placeholder="e.g. 5.5" min="0.1" step="0.1">
+            </div>
+            <div class="form-group">
+              <label>Soil Type</label>
+              <select id="farm-soil">
+                <option value="">Select Soil Type</option>
+                <option>Alluvial</option><option>Black (Regur)</option><option>Red &amp; Laterite</option>
+                <option>Arid &amp; Desert</option><option>Sandy Loam</option>
+                <option>Clay Loam</option><option>Sandy</option><option>Other</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">Crop Information</div></div>
+        <div class="card-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Crop Name *</label>
+              <select id="crop-name">
+                <option value="">Select Crop</option>
+                <option>Wheat</option><option>Rice / Paddy</option><option>Maize</option>
+                <option>Sugarcane</option><option>Cotton</option><option>Soybean</option>
+                <option>Mustard</option><option>Sunflower</option><option>Groundnut</option>
+                <option>Potato</option><option>Tomato</option><option>Onion</option>
+                <option>Pulses (Lentil/Gram)</option><option>Barley</option><option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Crop Variety</label>
+              <input type="text" id="crop-variety" placeholder="e.g. HD 2967, PB1121">
+            </div>
+            <div class="form-group">
+              <label>Sowing Date</label>
+              <input type="date" id="sowing-date">
+            </div>
+            <div class="form-group">
+              <label>Expected Harvest</label>
+              <input type="date" id="harvest-date">
+            </div>
+            <div class="form-group">
+              <label>Irrigation Source</label>
+              <select id="irrigation">
+                <option value="">Select Source</option>
+                <option>Canal</option><option>Borewell / Tubewell</option><option>River</option>
+                <option>Rainwater / Dryland</option><option>Tank / Pond</option>
+                <option>Drip Irrigation</option><option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Fertilizer Used</label>
+              <input type="text" id="fertilizer" placeholder="e.g. DAP, Urea">
+            </div>
+            <div class="form-group full">
+              <label>Additional Notes</label>
+              <textarea id="farm-notes" placeholder="Any specific problems, observations, or history..."></textarea>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-primary" onclick="saveFarm()">Save Farm</button>
+            <button class="btn btn-green" onclick="saveFarmAndChat()">Save and Ask AI</button>
+          </div>
+          <div class="alert alert-success" id="save-alert">Farm saved to database successfully.</div>
+          <div class="alert alert-error" id="save-error"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="chat-page">
+    <div class="chat-layout">
+      <div class="chat-sidebar">
+        <div class="chat-sidebar-header">Select Your Farm</div>
+        <div class="farm-selector" id="farm-selector">
+          <div class="sidebar-empty">No farms yet. Add one first.</div>
+        </div>
+        <div class="sidebar-footer">
+          <button class="btn btn-primary" style="width:100%;font-size:13px;" onclick="showPage('add-farm')">+ Add New Farm</button>
+        </div>
+      </div>
+
+      <div class="chat-window">
+        <div class="chat-header">
+          <div class="bot-avatar">AI</div>
+          <div class="chat-header-info">
+            <div class="chat-header-name">KisanBot - AI Farm Advisor</div>
+            <div class="chat-header-sub"><span class="online-dot"></span>Online • KisanBot Advisor</div>
+          </div>
+        </div>
+        <div class="selected-farm-context" id="farm-context-bar"></div>
+        <div class="messages" id="chat-messages">
+          <div class="no-farm-msg" id="no-farm-placeholder">
+            <div class="big-emoji">🌱</div>
+            <div>Select a farm from the sidebar to start chatting with your AI advisor</div>
+          </div>
+        </div>
+        <div class="quick-prompts" id="quick-prompts" style="display:none;">
+          <button class="quick-btn" onclick="sendQuick('What is the best fertilizer for my crop?')">Fertilizer</button>
+          <button class="quick-btn" onclick="sendQuick('How much water does my crop need?')">Irrigation</button>
+          <button class="quick-btn" onclick="sendQuick('Are there any pest risks I should watch for?')">Pests</button>
+          <button class="quick-btn" onclick="sendQuick('When should I harvest my crop?')">Harvest</button>
+          <button class="quick-btn" onclick="sendQuick('How can I improve soil health?')">Soil</button>
+        </div>
+        <div class="chat-input-area" id="chat-input-area" style="display:none;">
+          <textarea id="chat-input" placeholder="Ask anything about your farm..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+          <button class="send-btn" id="send-btn" onclick="sendMessage()">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="modal-overlay" id="delete-modal" onclick="closeDeleteModal()">
+  <div class="modal" onclick="window.event && window.event.stopPropagation()">
+    <div class="modal-icon">Delete</div>
+    <div class="modal-title">Delete Farm?</div>
+    <div class="modal-body" id="modal-farm-name"></div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeDeleteModal()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmDelete()">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/weather.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
