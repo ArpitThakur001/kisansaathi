@@ -2,6 +2,7 @@ node_modules/
 _xlsx_build/
 .env
 .env.*
+!.env.example
 npm-debug.log*
 *.log
 .DS_Store

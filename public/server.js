@@ -9,29 +9,33 @@ const cors = require('cors');
 const path = require('path');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+const DB_HOST = process.env.DB_HOST || 'localhost';
+const DB_USER = process.env.DB_USER || 'root';
+const DB_PASSWORD = process.env.DB_PASSWORD || '';
+const DB_NAME = process.env.DB_NAME || 'kisansaathi';
 
 app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname));
 
 const pool = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: '1234',
-  database: 'kisansaathi',
+  host: DB_HOST,
+  user: DB_USER,
+  password: DB_PASSWORD,
+  database: DB_NAME,
   waitForConnections: true,
   connectionLimit: 10,
 });
 
 async function initDB() {
   const raw = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '1234'
+    host: DB_HOST,
+    user: DB_USER,
+    password: DB_PASSWORD
   });
 
-  await raw.execute('CREATE DATABASE IF NOT EXISTS kisansaathi');
+  await raw.execute(`CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\``);
   await raw.end();
 
   await pool.execute(`

@@ -5,11 +5,12 @@ KisanSaathi is a farm management web app built with HTML, CSS, JavaScript, Node.
 ## Project Structure
 
 ```text
-New folder (2)/
+KisanSaathi/
 |-- package.json
 |-- package-lock.json
 |-- setup.sql
 |-- README.md
+|-- .env.example
 `-- public/
     |-- index.html
     |-- server.js
@@ -51,22 +52,23 @@ New folder (2)/
 npm install
 ```
 
-### 2. Configure MySQL
+### 2. Configure Environment Variables
 
-Open `public/server.js` and update the database credentials if needed:
+Use `.env.example` as a reference and set these variables in your terminal:
 
-```js
-const pool = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: '1234',
-  database: 'kisansaathi',
-  waitForConnections: true,
-  connectionLimit: 10,
-});
+```powershell
+$env:PORT="3000"
+$env:DB_HOST="localhost"
+$env:DB_USER="root"
+$env:DB_PASSWORD=""
+$env:DB_NAME="kisansaathi"
 ```
 
-Also update the same credentials inside the `initDB()` connection if your setup is different.
+If you want to use the AI advisor, also set your Groq API key:
+
+```powershell
+$env:GROQ_API_KEY="your_groq_api_key_here"
+```
 
 ### 3. Create tables
 
@@ -81,19 +83,15 @@ mysql -u root -p < setup.sql
 
 ### 4. Start the project
 
-If you want to use the AI advisor, set your Groq API key first:
+Start the server:
 
 ```powershell
-$env:GROQ_API_KEY="your_groq_api_key_here"
-```
-
-```bash
 npm start
 ```
 
 For development with auto-reload:
 
-```bash
+```powershell
 npm run dev
 ```
 
@@ -138,4 +136,5 @@ Visit `http://localhost:3000`
 
 - The backend entry file is `public/server.js`.
 - Static frontend files are served from the `public` folder.
+- Database configuration is read from environment variables.
 - The AI route reads the Groq key from `GROQ_API_KEY`.
